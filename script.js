@@ -43,7 +43,7 @@
       'Игрок написал в чат, кто купит мне 500 сапфиров за отсос в лс | mute 2h 3.8',
       'Игрок написал в /broadcast (Valera, ты вообще тупой) | ban 2d 4.3'
     ];
-
+	
     const particlesConfig = {
       particles: {
         number: {
@@ -62,7 +62,7 @@
     particlesJS("particles-js", particlesConfig);
 
     // Пароль, который требуется для входа
-    const correctPassword = 'HWPRAVILO1';
+    const correctPassword = 'HWBAN!';
 
     // Показать модальное окно при загрузке страницы, если пароль еще не сохранен
     window.onload = function() {
@@ -123,7 +123,7 @@ function startQuestions() {
     alert('Пожалуйста, введите имя.');
   }
 }
-
+	
 // Function to go back to the input section
 function goBack() {
   // Hide questions section and show input section
@@ -219,20 +219,27 @@ function loadQuestions() {
 
     function downloadResults() {
       const traineeName = document.getElementById('result-trainee').textContent;
-      let resultText = `Ник стажёра: ${traineeName}\n\n`;
+      const teacherName = document.getElementById('result-teacher').textContent;
+      const attesterName = document.getElementById('result-attester').textContent;
+      const totalScore = document.getElementById('total-score').textContent;
+      const timeSpent = document.getElementById('timer').textContent;
 
+      let results = `Итоговые данные:\n`;
+      results += `Ник стажёра: ${traineeName}\n`;
+      results += `Ник учителя: ${teacherName}\n`;
+      results += `Ник аттестатора: ${attesterName}\n\n`;
+      results += `Результаты по вопросам:\n`;
       scores.forEach((score, index) => {
-        resultText += `Вопрос ${index + 1}: ${score}\n`;
+        results += `Вопрос ${index + 1}: ${score}\n`;
       });
+      results += `\nОбщее количество баллов: ${totalScore}\n`;
+      results += `Оставшееся время: ${timeSpent}\n`;
 
-      resultText += `\nОбщее количество баллов: ${document.getElementById('total-score').textContent}\n`;
-      resultText += `Оставшейся время: ${document.getElementById('time-spent').textContent}\n`;
-
-      const blob = new Blob([resultText], { type: 'text/plain' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'HolyATT/TATT.txt';
-      link.click();
+      const blob = new Blob([results], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `results_${traineeName}.txt`;
+      a.click();
     }
 
     function startTimer() {
