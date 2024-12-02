@@ -143,20 +143,20 @@ function loadQuestions() {
 
   questionsList.innerHTML = '';
 
+function loadQuestions() {
+  const questionsList = document.getElementById('questions-list');
+  const questions = selectedGenerator === 'Учитель' ? teacherQuestions : attestationQuestions;
+
+  // Перемешиваем вопросы
+  const shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
+
+  // Берем первые 17 вопросов
+  const selectedQuestions = shuffledQuestions.slice(0, 17);
+
+  questionsList.innerHTML = '';
+
   // Генерация 17 вопросов без повторений
   selectedQuestions.forEach((question, index) => {
-    // Вставляем надпись "ДОП.ВОПРОС" перед 16-м вопросом (index 15)
-    if (index === 15) {
-      const additionalQuestionNotice = document.createElement('div');
-      additionalQuestionNotice.className = 'additional-question';
-      additionalQuestionNotice.style.textAlign = 'center';
-      additionalQuestionNotice.style.fontWeight = 'bold';
-      additionalQuestionNotice.style.color = '#ff6600';
-      additionalQuestionNotice.style.marginBottom = '10px';
-      additionalQuestionNotice.textContent = 'ДОП.ВОПРОС';
-      questionsList.appendChild(additionalQuestionNotice);
-    }
-
     const questionDiv = document.createElement('div');
     questionDiv.className = 'question-frame';
 
