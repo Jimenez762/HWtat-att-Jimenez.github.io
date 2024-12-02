@@ -145,6 +145,18 @@ function loadQuestions() {
 
   // Генерация 17 вопросов без повторений
   selectedQuestions.forEach((question, index) => {
+    // Вставляем надпись "ДОП.ВОПРОС" перед 16-м вопросом (index 15)
+    if (index === 15) {
+      const additionalQuestionNotice = document.createElement('div');
+      additionalQuestionNotice.className = 'additional-question';
+      additionalQuestionNotice.style.textAlign = 'center';
+      additionalQuestionNotice.style.fontWeight = 'bold';
+      additionalQuestionNotice.style.color = '#ff6600';
+      additionalQuestionNotice.style.marginBottom = '10px';
+      additionalQuestionNotice.textContent = 'ДОП.ВОПРОС';
+      questionsList.appendChild(additionalQuestionNotice);
+    }
+
     const questionDiv = document.createElement('div');
     questionDiv.className = 'question-frame';
 
@@ -166,7 +178,6 @@ function loadQuestions() {
     questionsList.appendChild(questionDiv);
   });
 }
-
 
     function selectScore(index, score) {
       scores[index] = score;
