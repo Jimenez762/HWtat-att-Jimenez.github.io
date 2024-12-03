@@ -62,7 +62,7 @@
     particlesJS("particles-js", particlesConfig);
 
     // Пароль, который требуется для входа
-    const correctPassword = 'HWBAN!';
+    const correctPassword = 'HWBAN!!';
 
     // Показать модальное окно при загрузке страницы, если пароль еще не сохранен
     window.onload = function() {
