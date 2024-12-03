@@ -62,7 +62,7 @@
     particlesJS("particles-js", particlesConfig);
 
     // Пароль, который требуется для входа
-    const correctPassword = 'HWBAN!';
+    const correctPassword = 'HWPRAVI1LO1';
 
     // Показать модальное окно при загрузке страницы, если пароль еще не сохранен
     window.onload = function() {
@@ -130,18 +130,6 @@ function goBack() {
   document.getElementById('questions-section').style.display = 'none';
   document.getElementById('name-input-section').style.display = 'block';
 }
-
-function loadQuestions() {
-  const questionsList = document.getElementById('questions-list');
-  const questions = selectedGenerator === 'Учитель' ? teacherQuestions : attestationQuestions;
-
-  // Перемешиваем вопросы
-  const shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
-
-  // Берем первые 17 вопросов
-  const selectedQuestions = shuffledQuestions.slice(0, 17);
-
-  questionsList.innerHTML = '';
 
 function loadQuestions() {
   const questionsList = document.getElementById('questions-list');
