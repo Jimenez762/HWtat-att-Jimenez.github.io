@@ -87,52 +87,6 @@
       letter-spacing: 1px;
     }
 
-    /* Поле ввода пароля */
-    .modal input {
-      width: 100%;
-      padding: 15px;
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      border: 2px solid #ff7f00;
-      border-radius: 8px;
-      background: #121212;
-      color: #fff;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .modal input:focus {
-      border-color: #ff3d00;
-      outline: none;
-      box-shadow: 0 0 5px rgba(255, 61, 0, 0.8);
-    }
-
-    /* Кнопка для отправки */
-    .modal button {
-      width: 100%;
-      padding: 15px;
-      font-size: 1.2rem;
-      background-color: #ff7f00;
-      border: none;
-      color: #fff;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .modal button:hover {
-      background-color: #ff3d00;
-      transform: scale(1.05);
-    }
-
-    /* Сообщение об ошибке */
-    .error-message {
-      color: #ff4747;
-      margin-top: 10px;
-      display: none;
-      font-size: 1rem;
-      font-weight: 500;
-    }
-
     /* Кнопка закрытия модалки */
     .close-btn {
       position: absolute;
