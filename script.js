@@ -60,40 +60,6 @@
     };
 
     particlesJS("particles-js", particlesConfig);
-
-    // Пароль, который требуется для входа
-    const correctPassword = 'HWBAN!!';
-
-    // Показать модальное окно при загрузке страницы, если пароль еще не сохранен
-    window.onload = function() {
-      const savedPassword = localStorage.getItem('password');
-      if (savedPassword !== correctPassword) {
-        document.getElementById("password-modal").classList.add("show");
-      } else {
-        // Если пароль уже сохранен, не показывать окно
-        document.getElementById("password-modal").classList.remove("show");
-      }
-    };
-
-    // Закрытие модального окна
-    function closeModal() {
-      document.getElementById("password-modal").classList.remove("show");
-    }
-
-    // Проверка пароля
-    function checkPassword() {
-      const passwordInput = document.getElementById('password-input');
-      const errorMessage = document.getElementById('error-message');
-
-      if (passwordInput.value === correctPassword) {
-        // Если пароль правильный, сохраняем его в LocalStorage
-        localStorage.setItem('password', correctPassword);
-        closeModal();
-      } else {
-        // Показываем сообщение об ошибке
-        errorMessage.style.display = 'block';
-      }
-    }
 	
     function selectGenerator(generator) {
       selectedGenerator = generator;
