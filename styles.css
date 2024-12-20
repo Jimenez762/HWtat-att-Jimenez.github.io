@@ -21,20 +21,25 @@
       color: #ff6600;
       margin-bottom: 20px;
     }
-    .button {
-      padding: 15px 30px;
-      font-size: 1.2rem;
-      margin: 10px;
-      border: none;
-      border-radius: 5px;
-      background: #007BFF;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .button:hover {
-      background: #0056b3;
-    }
+/* Обновленные стили для кнопок */
+.button {
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  margin: 10px;
+  border: none;
+  border-radius: 50px; /* Углы более округлые */
+  background: linear-gradient(135deg, #007bff, #0056b3); /* Градиент фона */
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Плавные переходы */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Легкая тень */
+}
+
+.button:hover {
+  background: linear-gradient(135deg, #0056b3, #003d73); /* Изменение градиента при наведении */
+  transform: translateY(-3px); /* Легкий подъем кнопки */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Увеличенная тень при наведении */
+}
     /* Стиль фона для модального окна */
     .modal {
       display: none;
@@ -115,17 +120,44 @@
       height: auto;
       margin: 0 auto 20px;
     }
-    .input-container input {
-      font-size: 1.2rem;
-      padding: 12px;
-      width: 100%;
-      max-width: 300px;
-      margin-top: 10px;
-      border-radius: 5px;
-      border: 2px solid #007BFF;
-      color: #fff;
-      background: #121212;
-    }
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.input-container input {
+    font-size: 1.2rem;
+    padding: 12px;
+    width: 100%;
+    max-width: 300px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 2px solid #007BFF;
+    color: #fff;
+    background: #121212;
+}
+
+.icons-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.icon {
+    font-size: 2rem;
+    color: #ff6600;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.icon:hover {
+    transform: scale(1.2);
+}
     .questions-container {
       max-width: 800px;
       margin: 20px auto;
@@ -220,6 +252,11 @@
       font-weight: bold;
     }
 
+.highlight-green {
+  color: #32CD32; /* Мягкий зеленый цвет */
+  font-weight: bold; /* Выделение текста, опционально */
+}
+
     #timer {
       font-size: 2rem;
       color: #ff6600;
@@ -235,3 +272,60 @@
       display: inline-block;
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     }
+
+    /* Контент модального окна */
+    .modal-content {
+      background: #1d1d1d;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+    }
+
+    /* Кнопка закрытия модалки */
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      color: #ff7f00;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    /* Стиль поля ввода */
+    .modal input {
+      padding: 10px;
+      margin-top: 15px;
+      width: 80%;
+      font-size: 1.2rem;
+    }
+
+    .modal button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .modal button:hover {
+      background-color: #0056b3;
+    }
+
+    .error-message {
+      color: red;
+      display: none;
+      margin-top: 15px;
+    }
+	
+/* Оранжевый цвет для всех баллов */
+.score-high, .score-medium, .score-low {
+  color: #FFA500; /* Оранжевый цвет */
+  font-weight: bold;
