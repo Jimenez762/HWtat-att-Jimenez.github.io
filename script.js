@@ -62,7 +62,7 @@
     particlesJS("particles-js", particlesConfig);
 	
 	 // Код, который будет проверять правильность введенного пароля
-    const correctPassword = 'abcdef';  // Задайте правильный набор букв
+    const correctPassword = '11hw';  // Задайте правильный набор букв
     const modal = document.getElementById('password-modal');
     const errorMessage = document.getElementById('error-message');
     const passwordInput = document.getElementById('password-input');
