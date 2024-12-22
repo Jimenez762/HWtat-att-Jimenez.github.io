@@ -329,3 +329,26 @@
 .score-high, .score-medium, .score-low {
   color: #FFA500; /* Оранжевый цвет */
   font-weight: bold;
+	
+	  /* Стиль кнопки "Назад" */
+.back-button {
+  position: fixed;           /* Фиксированное позиционирование */
+  top: 20px;                 /* Отступ сверху */
+  left: 20px;                /* Отступ слева */
+  z-index: 1000;             /* Поверх других элементов */
+  display: none;             /* Скрыта по умолчанию */
+  background-color: #ff6347; /* Красный фон для кнопки "Назад" */
+  padding: 12px 24px;        /* Отступы внутри кнопки */
+  font-size: 1rem;           /* Размер шрифта для кнопки "Назад" */
+  border-radius: 5px;        /* Скругленные углы */
+  color: white;              /* Белый текст */
+  border: none;              /* Без границы */
+  cursor: pointer;           /* Курсор "указатель" */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Плавный переход */
+}
+
+/* Стиль при наведении на кнопку "Назад" */
+.back-button:hover {
+  background-color: #e04f28; /* Темный красный при наведении */
+  transform: scale(1.05);     /* Легкое увеличение */
+}
