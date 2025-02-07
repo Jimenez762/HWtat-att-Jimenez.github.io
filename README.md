@@ -1,3 +1,3 @@
-# HWtat-att-Jimenez.github.io
+07.02.2025 Генератор остановлен by Colin
 Checker HW for Attestation(ATT) - Trial Attestation (TATT) by* Jimenez | Colin Sch.
-07.02.2025 Генератор стоп. по вопросам в вк Colin
+
