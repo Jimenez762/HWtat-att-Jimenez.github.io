@@ -1,72 +1,559 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Генератор вопросов</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Подключение стилей -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <title>Генератор Вопросов</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <style>
+    /* Основные стили */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #202124; /* Темный фон, как в ChatGPT */
+      color: #e8eaed; /* Светлый текст */
+      overflow: hidden;
+    }
+
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .container {
+      background: #333; /* Темный фон для контейнера */
+      padding: 30px;
+      border-radius: 8px;
+      text-align: center;
+      width: 600px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 25px;
+      color: #a5c3f1; /* Светло-синий для заголовка */
+    }
+
+    input, select, button {
+      width: 100%;
+      margin: 12px 0;
+      padding: 18px;
+      border: 1px solid #555; /* Темные границы для элементов */
+      border-radius: 8px;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      background-color: #202124; /* Тот же темный фон */
+      color: #e8eaed; /* Светлый текст */
+    }
+
+    input:focus, select:focus, button:focus {
+      border-color: #4e99d6; /* Ярко-синий при фокусе */
+      box-shadow: 0 0 5px rgba(78, 153, 214, 0.8);
+    }
+
+    button {
+      background-color: #3a3d42; /* Темно-серый цвет кнопок */
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      border-radius: 8px;
+      padding: 16px;
+      border: none;
+    }
+
+    /* Эффект нажатия и наведения */
+    button:hover {
+      background-color: #555a5e; /* Светлее при наведении */
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    button:active {
+      transform: scale(0.98); /* Эффект сжатия при клике */
+      background-color: #444a4f; /* Темнее при нажатии */
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .timer-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .timer-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .timer-buttons button {
+      padding: 12px 25px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #3a3d42; /* Темно-серый */
+      color: white;
+      border: none;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .timer-buttons button:hover {
+      background-color: #555a5e;
+    }
+
+    .timer {
+      font-size: 40px;
+      font-weight: bold;
+      margin-top: 25px;
+      color: #e74c3c; /* Красный для таймера */
+    }
+
+    .questions {
+      text-align: left;
+      margin-top: 25px;
+      overflow-y: auto;
+      max-height: 350px;
+      border: 1px solid #555;
+      padding: 20px;
+      border-radius: 12px;
+      background-color: rgba(0, 0, 0, 0.3);
+      margin-bottom: 30px;
+    }
+
+    .question-item {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px dotted #888; /* Пунктирная линия между вопросами */
+      padding-bottom: 20px;
+    }
+
+    .question-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .question-buttons button {
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #3a3d42; /* Темно-серый */
+      color: white;
+      border: none;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .question-buttons button.selected {
+      background-color: #e74c3c; /* Красный при выборе */
+    }
+
+    .question-buttons button:hover {
+      background-color: #555a5e;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+    }
+
+    .back-button {
+      margin-top: 25px;
+      background-color: #3a3d42; /* Темно-серый */
+      color: white;
+      cursor: pointer;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #555a5e;
+    }
+
+    .total-score {
+      margin-top: 20px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #e74c3c; /* Красный */
+    }
+
+    /* Модальное окно */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+.modal-content {
+  background-color: #333;
+  margin: 5% auto; /* Уменьшено значение margin-top */
+  padding: 25px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  max-height: 80vh; /* Ограничение по высоте */
+  overflow-y: auto; /* Прокрутка по вертикали */
+}
+
+    .modal-header {
+      font-size: 26px;
+      margin-bottom: 20px;
+      color: #e8eaed;
+    }
+
+    .modal-body {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+    }
+	
+	    /* Информация в углу */
+    .footer-text {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      font-size: 12px;
+      color: #a5c3f1; /* Светлый цвет текста */
+      z-index: 2;
+    }
+
+    /* Анимация появления */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 <body>
-  <div id="particles-js" style="position: absolute; width: 100%; height: 100%;"></div>
+  <div id="particles-js"></div>
 
-  <!-- Модальное окно -->
-  <div id="password-modal" class="modal">
+  <div class="container" id="step1">
+    <h2>Генератор Вопросов</h2>
+    <input type="text" id="trainee" placeholder="Введите ник Стажера" required>
+    <input type="text" id="teacher" placeholder="Введите ник Учителя (необязательно)">
+    <select id="role" onchange="togglePasswordField()">
+      <option value="">Выберите роль</option>
+      <option value="teacher">Учитель</option>
+      <option value="attestor">Аттестатор</option>
+    </select>
+    <input type="password" id="password" class="hidden" placeholder="Введите пароль">
+    <button onclick="generateQuestions()">Сгенерировать вопросы</button>
+    <div id="error-message" class="error-message"></div>
+  </div>
+
+  <div class="footer-text">
+    Owner: Jimenez<br>
+    Questions: kvezi, HackerCat777<br>
+    Created: 09.11.2024<br>
+    Latest update: 05.03.2025
+  </div>
+  
+  <div class="container hidden" id="step2">
+    <h2>Вопросы</h2>
+    <div class="timer-container">
+      <div class="timer-buttons">
+        <button onclick="startTimer()">Запустить таймер</button>
+        <button onclick="stopTimer()">Стоп таймер</button>
+        <button onclick="resetTimer()">Сбросить таймер</button>
+      </div>
+      <div id="timer" class="timer">12:00</div>
+    </div>
+
+    <div class="questions" id="questions"></div>
+    <button class="back-button" onclick="restart()">Назад</button>
+
+    <button onclick="calculateTotalScore()">Подсчитать баллы</button>
+    <div id="total-score" class="total-score">Общий балл: 0</div>
+  </div>
+
+  <div id="scoreModal" class="modal">
     <div class="modal-content">
-      <h2>Введите пароль</h2>
-      <input type="password" id="password-input" placeholder="Введите пароль">
-      <button class="button" onclick="checkPassword()">Войти</button>
-      <p id="error-message" class="error-message">Неверный пароль. Попробуйте еще раз.</p>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div class="modal-header">Результаты по вопросам</div>
+      <div class="modal-body" id="modalBody"></div>
+      <div id="finalResult" class="modal-body"></div>
     </div>
   </div>
 
-  <div class="container" id="main-container">
-    <h1>Генератор вопросов</h1>
-    <div id="generator-selection" class="section">
-    <link rel="stylesheet" href="styles.css">
-      <h2>Выберите генератор:</h2>
-      <button class="button" onclick="selectGenerator('Учитель')">Учитель</button>
-      <button class="button" onclick="selectGenerator('Аттестатор')">Аттестатор</button>
-    </div>
-    <div id="name-input-section" class="section">
-      <h2>Введите данные</h2>
-      <div class="input-container">
-        <input type="text" id="traineeName" placeholder="Ник стажёра">
-        <input type="text" id="teacherName" placeholder="Ник учителя (необязательно)">
-        <input type="text" id="attesterName" placeholder="Ник аттестатора (необязательно)">
-      </div>
-      <button class="button" onclick="startQuestions()">Начать тест</button>
-    </div>
-    <div id="questions-section" class="section">
-      <h2>Вопросы</h2>
-      <h3 id="timer">12:00</h3>
-      <button class="button" onclick="startTimer()">Запустить таймер</button>
-      <button class="button" onclick="stopTimer()">Остановить таймер</button>
-      <button class="button" onclick="resetTimer()">Сбросить таймер</button>
-      <div class="questions-container" id="questions-list"></div>
-      <button class="button" onclick="showResults()">Показать результаты</button>
-	  	  <!-- Кнопка "Назад" -->
-  <button class="button back-button" id="back-button" onclick="goBack()">Назад</button>
-    </div>
-    <div id="results-section" class="section">
-      <div class="d-flex justify-content-between">
-        <button class="button back-button" onclick="goBackToQuestions()">Назад к вопросам</button>
-        <button class="button back-button" onclick="downloadResults()">Скачать результаты</button>
-      </div>
-      <h2>Результаты</h2>
-      <div class="results-container">
-        <h3>Итоговые данные:</h3>
-        <p>Ник стажёра: <span id="result-trainee" class="highlight"></span></p>
-        <p>Ник учителя: <span id="result-teacher" class="highlight"></span></p>
-        <p>Ник аттестатора: <span id="result-attester" class="highlight"></span></p>
-        <div class="questions-results" id="questions-results"></div>
-        <p>Общее количество баллов: <span id="total-score" class="highlight">0</span></p>
-        <p>Оставшейся время: <span id="time-spent" class="highlight">12:00</span></p>
-      </div>
-    </div>
-  </div>
+  <script>
+    const questionsData = {
+      teacher: [
+        "Игрок пишет: Что ты выберешь? Сатурн или фт?! 3.1 Mute 1d", "Игрок пишет в чат другому игроку: «Напиши “я модератор”, и дам тебе бонус».! 2.6 ban 7d", "Игрок пишет: Пацанчики, кто любит свою сестру? + в чате киньте! 3.7 mute 3h",
+        "Игрок забанил другого игрока по причине Проверка связи! 4.2 ban 7d", "Игрок написал в чат 'КТО НА ПРОСТОТРЕНЕР 1x1 ЕЗКИ, ЛЮБОГО СОЛЬЮ', при этом, всё это капсом! 3.2 mute 1h", "Игрок написал в чат 'Ты Негр'! 3.9 mute 9h", "Игрок написал в чат '1x1 идём, ты отсосёшь! 3.8 mute 2h",
+        "Игрок забанил другого игрока по причине «1.2».! 2.1 ban 14d", "Ты заметил на аукционе алмаз и увидел ник продавца под ником AdminNEGR! /warn на 2h через 2 часа ban(навсегда) 1.5", "Игрок написал в чат 'Все на спавне прописывайте /suicide, в честь вайпа эта команда будет давать дк! 2.7 mute 5h", "Игрок на лайт анархии написал 'Жди докс, еблан'! 2.15 muteip",
+        "Игрок написал в чат 'Куплю вам дк или рубины за монет/ресы, писать в дс! 6.1 Бан 5 дней, при втором нарушение бан(Навсегда)", "Во время сделки один из участников сбелки пытается её сорвать! 1.8 ban 10d", "Игрок используя /broadcast написал (СЕЙЧАС БУДЕТ ЖЁСТКАЯ РАЗДАЧА НА СПАВНЕ) (Уточните, что капсом)! 4.3 ban 2d", "Игрок пишет в чат: «пошли на Луну».! нету нарушение"
+      ],
+      attestor: [
+        "Игрок пишет: Слушай, а ты на рилике долго?! 3.1 Mute 1d", "fdsfdsfdsfdsfdsfdsfdsfs! SOSAL", "Игрок пишет: слышь, проспамь очень много раз в чате мою сделку, а я тебе 50к заплачу.! 2.6 ban 7d", "Игрок пишет в чат: «Куплю 5 алмазов за 7кк».! нету нарушение",
+        "Игрок в шутку забанил своего тимейта по причине 'С 1 апреля'! 4.2 ban 7d", "Игрок на классике написал 'Продам дюп шлатков, писать в дс! 2.13 ban 14d", "Игрок написал другому игроку ХАХ, да ты с софтами,жди бана! 3.10 mute 5h", "Игрок написал в чат 2 одинаковых сообщения, после чего воспользовался /broadcast, написав ещё одно, такое же сообщение! 4.3 ban 2d",
+        "Игрок написал в чат 'Кидаешь мне 40 гривен на карту и я так уж и быть продам тебе эту базу! 2.5 ban 30d", "Игрок с измененым никнеймом Traiwy написал в чат Всем привет! устный пред 10-20 мин, не сменил 1.5 ban 4d", "Игрок пишет в чат 'Алл, все прописывайте команду /lobby в PVP режиме, дк дадут! 2.7 mute 5h", "Игрок написал в чат, кто купит мне 500 сапфиров за отсос в лс! 3.8 mute 2h",
+        "Игрок на классической анархии написал 'Жди докс, еблан! 2.15 banip (по хаббам) ", "Игрок создал гарант с описанием 'Игрок Valera покупает мне 500 рубинов за 3кк монет! 6.1 Бан 5 дней, при втором нарушение бан(Навсегда)", "Во время сделки один из участников сбелки пытается её сорвать! 1.8 ban 10d", "Игрол написал в 2 раза в чат число 52! нету нарушение"
+      ]
+    };
 
+    let time = 720;
+    let timerInterval;
+    let totalScore = 0;
+    let answers = [];
 
-  <script src="script.js"></script> <!-- Подключение скрипта -->
+    particlesJS('particles-js', {
+      particles: {
+        number: {
+          value: 80,
+          density: {
+            enable: true,
+            value_area: 800
+          }
+        },
+        color: {
+          value: "#ffffff"
+        },
+        shape: {
+          type: "circle",
+          stroke: {
+            width: 0,
+            color: "#ffffff"
+          }
+        },
+        opacity: {
+          value: 0.5,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 1,
+            opacity_min: 0.1,
+            sync: false
+          }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: {
+            enable: false,
+            speed: 40,
+            size_min: 0.1,
+            sync: false
+          }
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#ffffff",
+          opacity: 0.4,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 6,
+          direction: "none",
+          random: false,
+          straight: false,
+          out_mode: "out",
+          bounce: false
+        }
+      },
+      retina_detect: true
+    });
+
+    function togglePasswordField() {
+      const role = document.getElementById("role").value;
+      const passwordField = document.getElementById("password");
+      passwordField.classList.toggle("hidden", role !== "attestor");
+    }
+
+function generateQuestions() {
+  const role = document.getElementById("role").value;
+  const trainee = document.getElementById("trainee").value;
+  const teacher = document.getElementById("teacher").value;
+  const password = document.getElementById("password").value;
+
+  // Проверка наличия стажера
+  if (!trainee) {
+    document.getElementById("error-message").textContent = "Пожалуйста, введите ник стажера.";
+    return;
+  }
+
+  // Если роль аттестатор, проверяем введен ли правильный пароль
+  if (role === "attestor" && password !== "12q") {
+    document.getElementById("error-message").textContent = "Неверный пароль аттестатора.";
+    return;
+  }
+
+  // Очищаем сообщение об ошибке, если все условия выполнены
+  document.getElementById("error-message").textContent = "";
+
+  document.getElementById("step1").classList.add("hidden");
+  document.getElementById("step2").classList.remove("hidden");
+
+  let questionsDiv = document.getElementById("questions");
+  let questions = questionsData[role];
+
+  questionsDiv.innerHTML = "";
+  questions.forEach((question, index) => {
+    let questionElement = document.createElement("div");
+    questionElement.className = "question-item";
+
+    // Преобразуем вопрос, чтобы изменить цвет текста после "!"
+    question = highlightAfterExclamation(question);
+
+    questionElement.innerHTML = `
+      <div class="question-text">
+        Вопрос ${index + 1}: ${question}
+      </div>
+      <div class="question-buttons">
+        <button onclick="selectAnswer(${index}, 0)">0  </button>
+        <button onclick="selectAnswer(${index}, 0.5)">0.5</button>
+        <button onclick="selectAnswer(${index}, 1)">1  </button>
+      </div>
+    `;
+    questionsDiv.appendChild(questionElement);
+  });
+
+  // Добавляем сразу 16 вопросов в список
+  answers = new Array(16).fill(0);
+  totalScore = 0;
+  updateTotalScore();
+}
+
+// Функция для выделения текста после "!"
+function highlightAfterExclamation(question) {
+  const exclamationIndex = question.indexOf('!');
+  if (exclamationIndex === -1) return question;
+
+  const beforeExclamation = question.slice(0, exclamationIndex + 1);
+  const afterExclamation = question.slice(exclamationIndex + 1);
+
+  return `${beforeExclamation}<span style="color: orange;">${afterExclamation}</span>`;
+}
+
+    function selectAnswer(index, points) {
+      let questionButtons = document.querySelectorAll(`.question-item:nth-child(${index + 1}) .question-buttons button`);
+      questionButtons.forEach(button => button.classList.remove("selected"));
+
+      if (answers[index] !== undefined) {
+        totalScore -= answers[index];
+      }
+
+      answers[index] = points;
+      totalScore += points;
+
+      questionButtons.forEach((button, i) => {
+        if (i === points * 2) button.classList.add("selected");
+      });
+
+      updateTotalScore(); // Обновляем общий балл
+    }
+
+    function updateTotalScore() {
+      document.getElementById("total-score").textContent = `Общий балл: ${totalScore}`;
+    }
+
+    function calculateTotalScore() {
+      let modalContent = "<h3>Результаты по вопросам</h3>";
+      answers.forEach((score, index) => {
+        modalContent += `<p>Вопрос ${index + 1}: ${score} баллов</p>`;
+      });
+      modalContent += `<p><strong>Общий балл: ${totalScore}</strong></p>`;
+
+      if (totalScore >= 10) {
+        modalContent += "<p><strong>Поздравляю, вы сдали аттестацию!</strong></p>";
+      } else {
+        modalContent += "<p><strong>К сожалению, вы провалили аттестацию.</strong></p>";
+      }
+
+      document.getElementById("modalBody").innerHTML = modalContent;
+      openModal();
+    }
+
+    function openModal() {
+      document.getElementById("scoreModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("scoreModal").style.display = "none";
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+
+      timerInterval = setInterval(() => {
+        time--;
+        document.getElementById('timer').textContent = formatTime(time);
+        if (time <= 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    function resetTimer() {
+      time = 720;
+      document.getElementById('timer').textContent = formatTime(time);
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function formatTime(seconds) {
+      let minutes = Math.floor(seconds / 60);
+      let remainingSeconds = seconds % 60;
+      return `${minutes < 10 ? "0" : ""}${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+    }
+
+    function restart() {
+      document.getElementById("step1").classList.remove("hidden");
+      document.getElementById("step2").classList.add("hidden");
+      resetTimer();
+      totalScore = 0; // Сброс баллов при перезапуске
+      answers = [];
+      updateTotalScore(); // Обновляем отображение баллов
+    }
+  </script>
 </body>
 </html>
